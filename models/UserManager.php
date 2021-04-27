@@ -15,25 +15,44 @@ function GetAllUsers()
   return $response->fetchAll();
 }
 
-function GetUserIdFromUserAndPassword($nickname, $password)
+// function GetUserIdFromUserAndPassword($nickname, $password)
+// {
+//   global $PDO;
+
+//   $response = $PDO->query("SELECT id, password FROM user WHERE nickname = '$nickname' AND password = '$password'");
+//   $rows = $response->fetchAll();
+//   $usersNandP = count($rows);
+//   if ($usersNandP == 1) {
+//     $userConnect = $rows[0];
+//     return $userConnect['id'];
+//   } else {
+//     return -1;
+//   }
+// }
+
+function GetUserIdFromUserAndPassword($username, $password)
 {
   global $PDO;
-  // die("SELECT username, password FROM user WHERE username = '$username' AND password = '$password'");
-
-  $response = $PDO->query("SELECT id, password FROM user WHERE nickname = '$nickname' AND password = '$password'");
-  $rows = $response->fetchAll();
-  $usersNandP = count($rows);
-  if ($usersNandP == 1) {
-    $userConnect = $rows[0];
-    return $userConnect['id'];
+  $response = $PDO->prepare("SELECT id FROM user WHERE nickname = :username AND password = MD5(:password) ");
+  $response->execute(
+    array(
+      "username" => $username,
+      "password" => $password
+    )
+  );
+  if ($response->rowCount() == 1) {
+    $row = $response->fetch();
+    return $row['id'];
   } else {
     return -1;
   }
 }
+
+// 
 function CreateNewUser($nickname, $password)
 {
   global $PDO;
-  $response = $PDO->prepare("INSERT INTO user (nickname, password) values (:nickname , :password )");
+  $response = $PDO->prepare("INSERT INTO user (nickname, password) values (:nickname , MD5(:password) )");
   $response->execute(
     array(
       "nickname" => $nickname,
@@ -42,6 +61,8 @@ function CreateNewUser($nickname, $password)
   );
   return $PDO->lastInsertId();
 }
+
+//
 function IsNicknameFree($nickname)
 {
   global $PDO;
