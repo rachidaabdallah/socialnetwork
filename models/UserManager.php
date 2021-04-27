@@ -15,13 +15,18 @@ function GetAllUsers()
   return $response->fetchAll();
 }
 
-function GetUserIdFromUserAndPassword($username, $password)
+function GetUserIdFromUserAndPassword($nickname, $password)
 {
   global $PDO;
-  $response = $PDO->query("SELECT username, password  FROM user WHERE username = $username AND password = $password");
-  if (isset($username, $password)) {
-    return -1;
+  // die("SELECT username, password FROM user WHERE username = '$username' AND password = '$password'");
+
+  $response = $PDO->query("SELECT id, password FROM user WHERE nickname = '$nickname' AND password = '$password'");
+  $rows = $response->fetchAll();
+  $usersNandP = count($rows);
+  if ($usersNandP == 1) {
+    $userConnect = $rows[0];
+    return $userConnect;
   } else {
-    return $response->fetch();
+    return -1;
   }
 }
