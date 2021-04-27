@@ -25,7 +25,7 @@ function GetUserIdFromUserAndPassword($nickname, $password)
   $usersNandP = count($rows);
   if ($usersNandP == 1) {
     $userConnect = $rows[0];
-    return $userConnect;
+    return $userConnect['id'];
   } else {
     return -1;
   }

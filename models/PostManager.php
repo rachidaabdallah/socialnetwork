@@ -36,3 +36,9 @@ function SearchInPosts($search)
   );
   return $response->fetchAll();
 }
+function CreateNewPost($user_Id, $msg)
+{
+  global $PDO;
+  var_dump($user_Id, $msg, $_SESSION);
+  $PDO->exec("INSERT INTO post(user_id, content) values ($user_Id, '$msg')");
+}
