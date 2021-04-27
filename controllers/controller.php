@@ -7,7 +7,6 @@ if (isset($_GET["action"])) {
 $action = isset($_GET["action"]) ? $_GET["action"] : "display";
 
 switch ($action) {
-
   case 'register':
     // code...
     break;
@@ -32,7 +31,11 @@ switch ($action) {
   default:
     include "../models/PostManager.php";
     $posts = GetAllPosts();
-
+    if (isset($_GET['search'])) {
+      $posts = SearchInPosts($_GET['search']);
+    } else {
+      $posts = GetAllPosts();
+    }
     include "../models/CommentManager.php";
     $comments = array();
 
