@@ -62,6 +62,8 @@ function SearchInPosts($search)
 //   var_dump($user_Id, $msg, $_SESSION);
 //   $PDO->exec("INSERT INTO post(user_id, content) values ($user_Id, '$msg')");
 // }
+
+//
 function CreateNewPost($userId, $msg)
 {
   global $PDO;
